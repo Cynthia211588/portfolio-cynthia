@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Clicker+Script&family=Poppins:wght@300;400;500;600;700&display=swap">
 
     <!-- === CSS Files === -->
-    <link rel="stylesheet" href="css/style.css?v=20260930-10">
+    <link rel="stylesheet" href="css/style.css?v=20260930-12">
     <link rel="stylesheet" href="css/skins/color-1.css?v=20260930-8" id="skin-color">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style-switcher.css?v=20260930-8">
@@ -370,10 +370,7 @@
                     <h4 class="contact-sub-title padd-15">YOUR MESSAGE WILL BE DELIVERED TO MY EMAIL</h4>
                     <!-- ====== Contact Form ====== -->
                     <div class="row">
-                        <form class="contact-form padd-15" id="contact-form" action="https://formsubmit.co/appleclever0229@gmail.com" method="POST">
-                            <input type="hidden" name="_subject" value="New message from Cynthia's portfolio">
-                            <input type="hidden" name="_template" value="table">
-                            <input class="form-honeypot" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+                        <form class="contact-form padd-15" id="contact-form">
                             <div class="row">
                                 <div class="form-item col-6 padd-15">
                                     <div class="form-group">
@@ -405,7 +402,7 @@
                                     <button type="submit" class="btn"><span>Send Message</span> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                                 </div>
                             </div>
-                            <p class="form-status col-12 padd-15" role="status" aria-live="polite"></p>
+                            <p class="form-status col-12 padd-15" role="status" aria-live="polite" aria-atomic="true"></p>
                         </form>
                     </div>
                 </div>
@@ -472,7 +469,9 @@
     <div class="toast" role="status" aria-live="polite"></div>
     <!-- === Style Switcher End === -->
     <!-- === JS Files === -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="js/emailjs-config.js?v=20260930-12"></script>
     <script src="js/projects.js?v=20260930-8"></script>
-    <script src="js/script.js?v=20260930-8"></script>
+    <script src="js/script.js?v=20260930-12"></script>
 </body>
 </html>

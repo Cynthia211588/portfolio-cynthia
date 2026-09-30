@@ -281,21 +281,100 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const contactForm = document.querySelector("#contact-form");
-    contactForm?.addEventListener("submit", (event) => {
-        if (!contactForm.checkValidity()) {
-            event.preventDefault();
-            contactForm.reportValidity();
-            return;
-        }
+    if (contactForm && contactForm.dataset.emailjsBound !== "true") {
+        contactForm.dataset.emailjsBound = "true";
 
         const submitButton = contactForm.querySelector('button[type="submit"]');
+        const submitButtonLabel = submitButton?.querySelector("span");
         const status = contactForm.querySelector(".form-status");
-        if (submitButton) {
-            submitButton.disabled = true;
-            submitButton.querySelector("span").textContent = "Sending...";
+        const defaultButtonLabel = submitButtonLabel?.textContent || "Send Message";
+        const directEmailLink = document.querySelector('.contact-info-item a[href^="mailto:"]');
+        const directEmail = directEmailLink?.textContent.trim() || "appleclever0229@gmail.com";
+        const emailJsConfig = window.EMAILJS_CONFIG || {};
+        const hasEmailJsConfig = [
+            emailJsConfig.serviceId,
+            emailJsConfig.templateId,
+            emailJsConfig.publicKey,
+        ].every((value) => typeof value === "string" && value.trim() && !value.startsWith("YOUR_"));
+        let emailJsReady = false;
+
+        if (hasEmailJsConfig && window.emailjs) {
+            try {
+                window.emailjs.init({
+                    publicKey: emailJsConfig.publicKey,
+                    blockHeadless: true,
+                    limitRate: {
+                        id: "portfolio-contact-form",
+                        throttle: 10000,
+                    },
+                });
+                emailJsReady = true;
+            } catch (error) {
+                emailJsReady = false;
+            }
         }
-        if (status) status.textContent = "Sending your message securely...";
-    });
+
+        const clearFormStatus = () => {
+            if (!status) return;
+            status.classList.remove("is-success", "is-error");
+            status.replaceChildren();
+        };
+
+        const showFormMessage = (message, type = "") => {
+            if (!status) return;
+            clearFormStatus();
+            if (type) status.classList.add(`is-${type}`);
+            status.textContent = message;
+        };
+
+        const showFormError = () => {
+            if (!status) return;
+            clearFormStatus();
+            status.classList.add("is-error");
+            status.append("Message could not be sent right now. Please contact me directly by email: ");
+
+            const emailLink = document.createElement("a");
+            emailLink.href = `mailto:${directEmail}`;
+            emailLink.textContent = directEmail;
+            status.append(emailLink, ".");
+        };
+
+        contactForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            if (contactForm.dataset.submitting === "true") return;
+            if (!contactForm.checkValidity()) {
+                contactForm.reportValidity();
+                return;
+            }
+
+            contactForm.dataset.submitting = "true";
+            contactForm.setAttribute("aria-busy", "true");
+            if (submitButton) submitButton.disabled = true;
+            if (submitButtonLabel) submitButtonLabel.textContent = "Sending...";
+            showFormMessage("Sending your message securely...");
+
+            try {
+                if (!emailJsReady) throw new Error("EmailJS is not configured or unavailable.");
+
+                await window.emailjs.sendForm(
+                    emailJsConfig.serviceId,
+                    emailJsConfig.templateId,
+                    contactForm,
+                );
+
+                contactForm.reset();
+                showFormMessage("Your message was sent successfully. Thank you — I'll get back to you soon.", "success");
+            } catch (error) {
+                showFormError();
+            } finally {
+                delete contactForm.dataset.submitting;
+                contactForm.removeAttribute("aria-busy");
+                if (submitButton) submitButton.disabled = false;
+                if (submitButtonLabel) submitButtonLabel.textContent = defaultButtonLabel;
+            }
+        });
+    }
 
     const projectModal = document.querySelector("#project-modal");
     const modalImage = projectModal?.querySelector(".project-modal-image");

@@ -1335,19 +1335,33 @@ h3.my-profession {
     opacity: 0.75;
 }
 
-.form-honeypot {
-    position: absolute !important;
-    left: -9999px !important;
-    width: 1px !important;
-    height: 1px !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
-
 .contact .form-status {
     min-height: 24px;
     margin-top: -15px;
     color: var(--text-black-700);
+}
+
+.contact .form-status.is-success {
+    color: #1f7a4d;
+}
+
+.contact .form-status.is-error {
+    color: #b42318;
+}
+
+.contact .form-status a {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+body.dark .contact .form-status.is-success {
+    color: #6fd3a5;
+}
+
+body.dark .contact .form-status.is-error {
+    color: #ff8a80;
 }
 
 .toast {
