@@ -481,9 +481,15 @@ h3.my-profession {
     color: var(--text-black-700);
 }
 
+.about .about-content .about-overview {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(280px, 2fr);
+    align-items: start;
+}
+
 .about .about-content .personal-info {
-    flex: 0 0 60%;
-    max-width: 60%;
+    min-width: 0;
+    max-width: none;
     margin-top: 40px;
 }
 
@@ -522,8 +528,8 @@ h3.my-profession {
 }
 
 .about .about-content .skills {
-    flex: 0 0 45%;
-    max-width: 45%;
+    min-width: 0;
+    max-width: none;
     margin-top: 40px;
 }
 
@@ -1505,6 +1511,28 @@ body.dark .whatsapp-float {
         max-width: 50%;
     }
 
+    .about .about-content .about-overview {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .about .about-content .about-overview > .personal-info,
+    .about .about-content .about-overview > .skills {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .about .about-content .about-overview > .skills {
+        margin-top: 30px;
+    }
+
+    .about .about-content .skill-groups {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .about .about-content .skill-group:last-child {
+        grid-column: 1 / -1;
+    }
+
 }
 
 @media (max-width:767px) {
@@ -1522,6 +1550,15 @@ body.dark .whatsapp-float {
     .about .about-content .personal-info {
         flex: 0 0 100%;
         max-width: 100%;
+    }
+
+    .about .about-content .skill-groups {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .about .about-content .skill-group:last-child {
+        grid-column: auto;
     }
 
     .section {
