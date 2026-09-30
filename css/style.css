@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Anta&family=Clicker+Script&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:wght@300;400;500;600;700&family=Special+Gothic+Expanded+One&display=swap');
 :root {
     --bg-black-900: #f2f2fc;
     --bg-black-100: #fdf9ff;
@@ -52,6 +51,29 @@ ul {
     list-style: none;
 }
 
+.skip-link {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 3000;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: var(--text-black-900);
+    color: var(--bg-black-100);
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(calc(-100% - 24px));
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
 .section {
     background: var(--bg-black-900);
     min-height: 100vh;
@@ -63,19 +85,11 @@ ul {
 
 .section.section-transition-ready {
     opacity: 0;
-    filter: blur(2px);
-    transform: translateY(28px) scale(0.995);
-    transition:
-        opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-        filter 0.55s ease;
-    will-change: opacity, transform, filter;
+    transition: opacity 0.55s ease;
 }
 
 .section.section-transition-ready.section-visible {
     opacity: 1;
-    filter: blur(0);
-    transform: translateY(0) scale(1);
 }
 
 .hidden {
@@ -423,13 +437,20 @@ h3.my-profession {
     top: -40px;
 }
 
-.home .home-img img {
-    display: block;
-    max-width: 100%;
-    margin: auto;
+.home .profile-image-frame {
+    width: min(100%, 280px);
+    aspect-ratio: 4 / 5;
+    margin: 0 auto;
+    overflow: hidden;
     border-radius: 5px;
+}
+
+.home .profile-image-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    height: 350px; /* can adjust here */
+    object-position: center center;
 }
 
 /* About */
@@ -930,18 +951,20 @@ h3.my-profession {
 .project-modal {
     position: fixed;
     inset: 0;
-    z-index: 300;
+    z-index: 2000;
     display: grid;
     visibility: hidden;
     place-items: center;
     padding: 30px;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .project-modal.open {
     visibility: visible;
     opacity: 1;
+    pointer-events: auto;
 }
 
 .project-modal-backdrop {
@@ -949,6 +972,7 @@ h3.my-profession {
     inset: 0;
     background: rgba(12, 12, 20, 0.78);
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .project-modal-panel {
@@ -957,6 +981,8 @@ h3.my-profession {
     width: min(920px, 100%);
     max-height: 90vh;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     border: 1px solid var(--bg-black-50);
     border-radius: 18px;
     background: var(--bg-black-100);
@@ -997,6 +1023,10 @@ h3.my-profession {
     object-fit: contain;
     opacity: 1;
     transition: opacity 0.12s ease;
+}
+
+.project-modal-image[hidden] {
+    display: none;
 }
 
 .project-modal-image.is-changing {
@@ -1340,16 +1370,26 @@ h3.my-profession {
     position: fixed;
     right: 26px;
     bottom: 26px;
-    z-index: 250;
+    z-index: 1000;
     display: grid;
     width: 58px;
     height: 58px;
     place-items: center;
     border-radius: 50%;
-    background: #25d366;
+    background-color: #25d366;
     color: #fff;
+    opacity: 1;
+    visibility: visible;
+    filter: none;
+    mix-blend-mode: normal;
+    isolation: isolate;
     box-shadow: 0 12px 28px rgba(12, 83, 39, 0.34);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+body.dark .whatsapp-float {
+    background-color: #25d366;
+    color: #fff;
 }
 
 .whatsapp-float .whatsapp-icon {
@@ -1426,9 +1466,8 @@ h3.my-profession {
         padding-left: 30px;
     }
 
-    .home .home-img img {
-        width: clamp(240px, 28vw, 300px);
-        height: auto;
+    .home .profile-image-frame {
+        width: clamp(240px, 28vw, 280px);
     }
 
     .home-img::before,
@@ -1506,9 +1545,9 @@ h3.my-profession {
         padding: 0 15px;
     }
 
-    .home .home-img img {
+    .home .profile-image-frame {
         width: clamp(130px, 36vw, 160px);
-        height: clamp(130px, 36vw, 160px);
+        aspect-ratio: 1 / 1;
         border: 4px solid var(--bg-black-100);
         border-radius: 50%;
         box-shadow: 0 10px 28px rgba(48, 46, 77, 0.18);
@@ -1599,7 +1638,5 @@ h3.my-profession {
     .section.section-transition-ready,
     .section.section-transition-ready.section-visible {
         opacity: 1;
-        filter: none;
-        transform: none;
     }
 }

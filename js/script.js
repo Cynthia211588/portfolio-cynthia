@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="portfolio-item">
                     <article class="project-card shadow-dark" data-project-index="${projectIndex}">
                         <div class="portfolio-img project-card-image">
-                            <img src="${escapeHtml(firstImage)}" alt="${escapeHtml(project.title)} project screenshot" loading="lazy">
+                            <img src="${escapeHtml(firstImage)}" alt="${escapeHtml(project.title)} project screenshot" loading="lazy" decoding="async">
                             ${projectType ? `<span class="project-type">${escapeHtml(projectType)}</span>` : ""}
                         </div>
                         <div class="project-card-content">
@@ -133,20 +133,30 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!target) return;
 
             event.preventDefault();
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
+            const isSkipLink = link.classList.contains("skip-link");
+            if (isSkipLink) target.focus({ preventScroll: true });
+            target.scrollIntoView({ behavior: isSkipLink ? "auto" : "smooth", block: "start" });
             history.replaceState(null, "", `#${targetId}`);
             setActiveNav(targetId);
             setMenuOpen(false);
         });
     });
 
+    let sectionOffsets = [];
+    const refreshSectionOffsets = () => {
+        sectionOffsets = sections.map((section) => ({
+            id: section.id,
+            top: section.getBoundingClientRect().top + window.scrollY
+        }));
+    };
+
     let scrollTicking = false;
     const updateActiveSection = () => {
         const marker = window.scrollY + window.innerHeight * 0.35;
-        let currentSection = sections[0]?.id || "home";
+        let currentSection = sectionOffsets[0]?.id || sections[0]?.id || "home";
 
-        sections.forEach((section) => {
-            if (section.offsetTop <= marker) currentSection = section.id;
+        sectionOffsets.forEach((section) => {
+            if (section.top <= marker) currentSection = section.id;
         });
 
         if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
@@ -164,9 +174,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }, { passive: true });
 
+    let resizeTicking = false;
     window.addEventListener("resize", () => {
         if (window.innerWidth > 1199) setMenuOpen(false);
-    });
+        if (!resizeTicking) {
+            window.requestAnimationFrame(() => {
+                refreshSectionOffsets();
+                updateActiveSection();
+                resizeTicking = false;
+            });
+            resizeTicking = true;
+        }
+    }, { passive: true });
+
+    window.addEventListener("load", () => {
+        refreshSectionOffsets();
+        updateActiveSection();
+    }, { once: true });
 
     document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
@@ -186,7 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const applySkin = (colorName) => {
         const selectedColor = skinColors[colorName] ? colorName : "color-1";
-        if (skinLink) skinLink.href = `css/skins/${selectedColor}.css?v=20260930-4`;
+        if (skinLink) skinLink.href = `css/skins/${selectedColor}.css?v=20260930-8`;
         if (themeMeta) themeMeta.content = skinColors[selectedColor];
 
         colorButtons.forEach((button) => {
@@ -350,6 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const updateGallery = () => {
         if (!modalImage || !galleryImages.length) return;
+        modalImage.hidden = false;
         modalImage.classList.add("is-changing");
         window.setTimeout(() => {
             modalImage.src = galleryImages[galleryIndex];
@@ -373,7 +398,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!galleryThumbnails) return;
         galleryThumbnails.innerHTML = galleryImages.map((imagePath, index) => `
             <button class="gallery-thumbnail" type="button" data-gallery-index="${index}" aria-label="Show project image ${index + 1}">
-                <img src="${escapeHtml(imagePath)}" alt="" loading="lazy">
+                <img src="${escapeHtml(imagePath)}" alt="" loading="lazy" decoding="async">
             </button>
         `).join("");
 
@@ -420,11 +445,15 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const closeProjectModal = () => {
-        if (!projectModal?.classList.contains("open")) return;
+        const wasOpen = projectModal?.classList.contains("open");
+        if (!projectModal) {
+            body.classList.remove("modal-open");
+            return;
+        }
         projectModal.classList.remove("open");
         projectModal.setAttribute("aria-hidden", "true");
         body.classList.remove("modal-open");
-        lastFocusedElement?.focus();
+        if (wasOpen) lastFocusedElement?.focus();
     };
 
     document.querySelectorAll(".project-details-button").forEach((button) => {
@@ -455,5 +484,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.key === "ArrowRight") moveGallery(1);
     });
 
+    window.addEventListener("pageshow", () => {
+        if (!projectModal?.classList.contains("open")) body.classList.remove("modal-open");
+        refreshSectionOffsets();
+        updateActiveSection();
+    });
+
+    refreshSectionOffsets();
     updateActiveSection();
 });
