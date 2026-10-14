@@ -387,10 +387,71 @@ document.addEventListener("DOMContentLoaded", () => {
     const galleryNext = projectModal?.querySelector(".gallery-next");
     const galleryStatus = projectModal?.querySelector(".gallery-status");
     const galleryThumbnails = projectModal?.querySelector(".gallery-thumbnails");
+    const imageViewer = projectModal?.querySelector(".project-image-viewer");
+    const imageViewerStage = imageViewer?.querySelector(".image-viewer-stage");
+    const imageViewerImage = imageViewer?.querySelector(".image-viewer-image");
+    const imageViewerLevel = imageViewer?.querySelector(".image-viewer-level");
+    const imageViewerClose = imageViewer?.querySelector(".image-viewer-close");
     let galleryImages = [];
     let galleryIndex = 0;
     let lastFocusedElement = null;
     let touchStartX = 0;
+    let imageZoom = 1;
+    let imagePanX = 0;
+    let imagePanY = 0;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragOriginX = 0;
+    let dragOriginY = 0;
+    let pinchStartDistance = 0;
+    let pinchStartZoom = 1;
+    const activePointers = new Map();
+
+    const clampZoom = (value) => Math.min(6, Math.max(1, value));
+
+    const applyImageTransform = () => {
+        if (!imageViewerImage) return;
+        if (imageZoom === 1) {
+            imagePanX = 0;
+            imagePanY = 0;
+        }
+        imageViewerImage.style.transform = `translate3d(${imagePanX}px, ${imagePanY}px, 0) scale(${imageZoom})`;
+        if (imageViewerLevel) imageViewerLevel.textContent = `${Math.round(imageZoom * 100)}%`;
+        imageViewerStage?.classList.toggle("is-dragging", activePointers.size > 0 && imageZoom > 1);
+    };
+
+    const setImageZoom = (nextZoom) => {
+        imageZoom = clampZoom(nextZoom);
+        applyImageTransform();
+    };
+
+    const resetImageZoom = () => {
+        imageZoom = 1;
+        imagePanX = 0;
+        imagePanY = 0;
+        activePointers.clear();
+        applyImageTransform();
+    };
+
+    const isImageViewerOpen = () => Boolean(imageViewer && !imageViewer.hidden);
+
+    const openImageViewer = () => {
+        if (!imageViewer || !imageViewerImage || !modalImage?.src) return;
+        imageViewerImage.src = modalImage.src;
+        imageViewerImage.alt = modalImage.alt;
+        resetImageZoom();
+        imageViewer.hidden = false;
+        imageViewer.setAttribute("aria-hidden", "false");
+        imageViewerClose?.focus();
+    };
+
+    const closeImageViewer = (restoreFocus = true) => {
+        if (!imageViewer || imageViewer.hidden) return;
+        imageViewer.hidden = true;
+        imageViewer.setAttribute("aria-hidden", "true");
+        resetImageZoom();
+        if (restoreFocus) modalImage?.focus();
+    };
 
     const createTextSection = (title, value) => {
         const text = cleanProjectText(value);
@@ -453,6 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const updateGallery = () => {
         if (!modalImage || !galleryImages.length) return;
+        closeImageViewer(false);
         modalImage.hidden = false;
         modalImage.classList.add("is-changing");
         window.setTimeout(() => {
@@ -529,6 +591,7 @@ document.addEventListener("DOMContentLoaded", () => {
             body.classList.remove("modal-open");
             return;
         }
+        closeImageViewer(false);
         projectModal.classList.remove("open");
         projectModal.setAttribute("aria-hidden", "true");
         body.classList.remove("modal-open");
@@ -547,17 +610,92 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     galleryPrevious?.addEventListener("click", () => moveGallery(-1));
     galleryNext?.addEventListener("click", () => moveGallery(1));
+    modalImage?.addEventListener("click", openImageViewer);
+    modalImage?.addEventListener("keydown", (event) => {
+        if (["Enter", " "].includes(event.key)) {
+            event.preventDefault();
+            openImageViewer();
+        }
+    });
+    imageViewerClose?.addEventListener("click", () => closeImageViewer());
+    imageViewer?.querySelector('[data-zoom-action="in"]')?.addEventListener("click", () => setImageZoom(imageZoom + 0.5));
+    imageViewer?.querySelector('[data-zoom-action="out"]')?.addEventListener("click", () => setImageZoom(imageZoom - 0.5));
+    imageViewer?.querySelector('[data-zoom-action="reset"]')?.addEventListener("click", resetImageZoom);
+    imageViewerStage?.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        setImageZoom(imageZoom + (event.deltaY < 0 ? 0.25 : -0.25));
+    }, { passive: false });
+    imageViewerStage?.addEventListener("dblclick", () => {
+        if (imageZoom > 1) resetImageZoom();
+        else setImageZoom(2);
+    });
+    imageViewerStage?.addEventListener("pointerdown", (event) => {
+        activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        imageViewerStage.setPointerCapture(event.pointerId);
+        if (activePointers.size === 1) {
+            dragStartX = event.clientX;
+            dragStartY = event.clientY;
+            dragOriginX = imagePanX;
+            dragOriginY = imagePanY;
+        } else if (activePointers.size === 2) {
+            const points = [...activePointers.values()];
+            pinchStartDistance = Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y);
+            pinchStartZoom = imageZoom;
+        }
+        applyImageTransform();
+    });
+    imageViewerStage?.addEventListener("pointermove", (event) => {
+        if (!activePointers.has(event.pointerId)) return;
+        activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        if (activePointers.size === 2) {
+            const points = [...activePointers.values()];
+            const distance = Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y);
+            if (pinchStartDistance) setImageZoom(pinchStartZoom * (distance / pinchStartDistance));
+        } else if (imageZoom > 1) {
+            imagePanX = dragOriginX + event.clientX - dragStartX;
+            imagePanY = dragOriginY + event.clientY - dragStartY;
+            applyImageTransform();
+        }
+    });
+    const releaseImagePointer = (event) => {
+        activePointers.delete(event.pointerId);
+        if (activePointers.size === 1) {
+            const remaining = [...activePointers.values()][0];
+            dragStartX = remaining.x;
+            dragStartY = remaining.y;
+            dragOriginX = imagePanX;
+            dragOriginY = imagePanY;
+        }
+        applyImageTransform();
+    };
+    imageViewerStage?.addEventListener("pointerup", releaseImagePointer);
+    imageViewerStage?.addEventListener("pointercancel", releaseImagePointer);
 
     projectModal?.addEventListener("touchstart", (event) => {
+        if (isImageViewerOpen()) return;
         touchStartX = event.changedTouches[0].clientX;
     }, { passive: true });
     projectModal?.addEventListener("touchend", (event) => {
+        if (isImageViewerOpen()) return;
         const distance = event.changedTouches[0].clientX - touchStartX;
         if (Math.abs(distance) > 50) moveGallery(distance > 0 ? -1 : 1);
     }, { passive: true });
 
     document.addEventListener("keydown", (event) => {
         if (!projectModal?.classList.contains("open")) return;
+        if (isImageViewerOpen()) {
+            if (event.key === "Escape") closeImageViewer();
+            if (["+", "="].includes(event.key)) setImageZoom(imageZoom + 0.5);
+            if (event.key === "-") setImageZoom(imageZoom - 0.5);
+            if (["0", "Home"].includes(event.key)) resetImageZoom();
+            if (event.key === "ArrowLeft" && imageZoom > 1) imagePanX += 40;
+            if (event.key === "ArrowRight" && imageZoom > 1) imagePanX -= 40;
+            if (event.key === "ArrowUp" && imageZoom > 1) imagePanY += 40;
+            if (event.key === "ArrowDown" && imageZoom > 1) imagePanY -= 40;
+            applyImageTransform();
+            event.preventDefault();
+            return;
+        }
         if (event.key === "Escape") closeProjectModal();
         if (event.key === "ArrowLeft") moveGallery(-1);
         if (event.key === "ArrowRight") moveGallery(1);

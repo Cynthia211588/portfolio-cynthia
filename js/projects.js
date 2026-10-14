@@ -68,21 +68,36 @@ window.portfolioProjects = [
     {
         title: "Nutrition Tracker",
         type: "AI Innovation Hackathon",
-        summary: "A team-developed nutrition and dietary tracking application that won the AI Innovation Hackathon Grand Champion award.",
-        tags: ["Frontend Development", "Software Testing", "Team Project"],
-        images: ["images/portfolio/portfolio-1.jpg"],
-        overview: "Nutrition Tracker was created during the AI Innovation Hackathon to support nutrition and dietary tracking.",
+        summary: "An AI-assisted meal tracking platform that turns food photos into nutrition insights for users and patient-monitoring data for administrators.",
+        tags: ["JavaScript", "Tailwind CSS", "Vite", "Supabase", "Google Gemini", "FlexToken AI", "USDA API", "Chart.js"],
+        images: [
+            "images/Nutrition Tracker/homepage.png",
+            "images/Nutrition Tracker/UserDashboard.png",
+            "images/Nutrition Tracker/OutputAnalysis.png",
+            "images/Nutrition Tracker/adminDsahboard.png",
+            "images/Nutrition Tracker/AdminViewDetail.png",
+            "images/Nutrition Tracker/UploadPage.png",
+            "images/Nutrition Tracker/history.png",
+            "images/Nutrition Tracker/UserProfile.png"
+        ],
+        overview: "Nutrition Tracker was developed by a five-member team during the AI Innovation Hackathon. The prototype allows users to upload a meal photo, review detected food items and receive estimated nutrition information and AI-assisted dietary insights. It also provides administrators with patient status monitoring and individual nutrition dashboards.",
         contribution: [
-            "Contributed to the frontend implementation.",
-            "Conducted functional and usability testing as part of the project team."
+            "Developed and refined the frontend interfaces for the user and administrator workflows.",
+            "Implemented responsive behaviour so the application remained usable across desktop, tablet and mobile screen sizes.",
+            "Conducted functional and responsive testing and verified the complete upload-to-analysis workflow before presentation."
         ],
         keyFeatures: [
-            "Nutrition and dietary tracking application workflow.",
-            "Frontend experience developed and tested collaboratively."
+            "Meal-image upload followed by AI-assisted food identification and editable portion confirmation.",
+            "Estimated calories, macronutrients, micronutrients and meal-level dietary feedback.",
+            "User dashboard with daily and weekly nutrition summaries, charts and AI-generated recommendations.",
+            "Meal history, user health profile and detailed nutrition-analysis views.",
+            "Administrator dashboard for monitoring patient risk status and reviewing individual patient trends."
         ],
-        technicalChallenge: "",
-        solution: "",
+        technicalChallenge: "The organiser-provided FlexToken model accepted text but could not interpret uploaded food images directly. The team therefore needed a reliable bridge between the image-upload experience and the text-based nutrition assessment pipeline.",
+        solution: "The team integrated Google Gemini as the multimodal vision layer to interpret the uploaded meal image and return structured food information. The structured output could then be combined with USDA nutrition data and passed as text into the organiser-provided FlexToken Qwen 2.5 model for assessment and recommendations. On the frontend, I implemented and tested the multi-step upload, confirmation and result experience across responsive layouts.",
         results: [
+            "Successfully deployed a working prototype and provided QR-code access for judges to test during the live presentation.",
+            "Completed the full user and administrator demonstration flow, including meal upload, nutrition analysis, dashboards and patient monitoring.",
             "Won Grand Champion among 10 teams from UTAR Sungai Long and Kampar campuses."
         ],
         github: "",
