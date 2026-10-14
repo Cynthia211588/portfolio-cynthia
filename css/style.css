@@ -512,6 +512,7 @@ h3.my-profession {
     color: var(--text-black-700);
     margin-left: 4px;
     display: inline-block;
+    overflow-wrap: anywhere;
 }
 
 .about .about-content .personal-info .info-item a {
@@ -691,6 +692,76 @@ h3.my-profession {
     text-align: left;
     color: var(--text-black-700);
     overflow-wrap: anywhere;
+}
+
+.about .about-content .timeline .timeline-organization {
+    margin: -8px 0 12px;
+    color: var(--skin-color);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.about .about-content .timeline .timeline-points {
+    padding-left: 18px;
+    list-style: disc;
+    color: var(--text-black-700);
+}
+
+.about .about-content .timeline .timeline-points li {
+    margin-bottom: 8px;
+    line-height: 1.65;
+}
+
+.about .about-content .timeline .timeline-points li:last-child {
+    margin-bottom: 0;
+}
+
+.about .about-content .achievements {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-top: 30px;
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    padding: 0 15px;
+}
+
+.achievement-card {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid var(--bg-black-50);
+    border-radius: 10px;
+    background: var(--bg-black-100);
+    box-shadow: 0 8px 24px rgba(48, 46, 77, 0.08);
+    transition: all 0.3s ease;
+}
+
+.achievement-card:hover,
+.achievement-card:focus-within {
+    box-shadow: 0 0 20px rgba(48, 46, 77, 0.15);
+}
+
+.achievement-card .achievement-date {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--skin-color);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.achievement-card h4 {
+    margin-bottom: 10px;
+    color: var(--text-black-900);
+    font-size: 18px;
+}
+
+.achievement-card p {
+    color: var(--text-black-700);
+    font-size: 15px;
+    line-height: 1.7;
 }
 
 /* Service */
@@ -1575,6 +1646,11 @@ body.dark .whatsapp-float {
         grid-column: auto;
     }
 
+    .achievement-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
     .section {
         padding-left: 15px;
         padding-right: 15px;
@@ -1670,6 +1746,13 @@ body.dark .whatsapp-float {
 
     .whatsapp-float span {
         display: none;
+    }
+}
+
+@media (max-width:575px) {
+    .about .about-content .personal-info .info-item {
+        flex: 0 0 100%;
+        max-width: 100%;
     }
 }
 
