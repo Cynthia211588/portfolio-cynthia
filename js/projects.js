@@ -40,25 +40,41 @@ window.portfolioProjects = [
         demo: ""
     },
     {
-        title: "Hotel Management System and AWS Cloud Deployment",
+        title: "Hotel Booking Management System",
         type: "Web Application",
-        summary: "A database-driven hotel management application developed with Laravel and deployed across multiple AWS services.",
-        tags: ["Laravel", "PHP", "MySQL", "AWS EC2", "RDS", "S3", "Elastic Beanstalk"],
-        images: ["images/portfolio/portfolio-1.jpg"],
-        overview: "This project combines a Laravel hotel management application with a cloud deployment architecture on AWS.",
+        summary: "A Laravel hotel booking platform with customer booking workflows and administrative management tools.",
+        tags: ["Laravel", "PHP", "MySQL", "Blade", "Eloquent ORM"],
+        images: [
+            "images/HotelManagement/Homepage1.png",
+            "images/HotelManagement/HomePage2.png",
+            "images/HotelManagement/detail.png",
+            "images/HotelManagement/Payment.png",
+            "images/HotelManagement/History.png",
+            "images/HotelManagement/BookingDetail.png",
+            "images/HotelManagement/admindashboard.png",
+            "images/HotelManagement/adminHotel.png",
+            "images/HotelManagement/AdminViewhOTEL.png",
+            "images/HotelManagement/AdminAddHotel.png",
+            "images/HotelManagement/login.png"
+        ],
+        overview: "The Hotel Booking Management System is a four-member university project built with Laravel and MySQL. It supports the complete journey from browsing hotels and rooms to making, reviewing and managing bookings, alongside an administration panel for maintaining the system's records.",
         contribution: [
-            "Developed the database-driven web application using Laravel, PHP and MySQL.",
-            "Configured and deployed the application using AWS cloud services."
+            "Set up the Laravel project and contributed to the core User, Hotel, Room and Booking models, migrations and database seeders.",
+            "Developed the user-facing hotel detail, room selection, booking, payment and booking-history workflows.",
+            "Implemented the administration panel's room-management CRUD interfaces and integrated them with the shared routing and layout structure.",
+            "Contributed interface styling, integration fixes and booking-related refinements across the group project."
         ],
         keyFeatures: [
-            "Hotel management workflows backed by a relational MySQL database.",
-            "Cloud deployment using EC2, RDS, S3 and Elastic Beanstalk.",
-            "VPC, subnet and security group configuration."
+            "Hotel browsing with state filters, search and recently viewed hotels.",
+            "Room selection with date-based availability, booking creation and payment-status tracking.",
+            "User authentication, profile management, booking history and cancellation flows.",
+            "Administrative CRUD, search and filtering for hotels, rooms, customers and bookings."
         ],
-        technicalChallenge: "",
-        solution: "",
+        technicalChallenge: "Preventing overbooking was more complex than checking a room's status because availability depends on overlapping date ranges, requested room quantity and bookings that are still pending or already confirmed.",
+        solution: "I implemented server-side availability logic that detects overlapping stays using check-in and check-out comparisons, totals the quantities already reserved and compares the remaining rooms with the requested quantity. The booking flow also validates the dates, hotel-room relationship and guest capacity before calculating the stay total and creating a unique booking code.",
         results: [
-            "Completed the application deployment using the documented AWS architecture."
+            "Completed an integrated Laravel application with connected user and administrator workflows.",
+            "Used relational models, validation, authorization and seeded data to support realistic booking scenarios."
         ],
         github: "",
         report: "",
@@ -132,22 +148,36 @@ window.portfolioProjects = [
     {
         title: "X's Adventure",
         type: "2D Puzzle Platformer",
-        summary: "A Godot puzzle platformer featuring movement mechanics, interactive puzzles and environmental obstacles.",
-        tags: ["Godot Engine", "GDScript", "Git", "GitHub", "Game Development"],
-        images: ["images/portfolio/portfolio-1.jpg"],
-        overview: "X's Adventure is a 2D puzzle platformer built around player movement, object interaction and environmental challenges.",
+        summary: "A four-level Godot puzzle platformer combining physics-based interaction, environmental hazards and time-limited challenges.",
+        tags: ["Godot 4", "GDScript", "2D Physics", "Git", "GitHub"],
+        images: [
+            "images/Godot/Level3.png",
+            "images/Godot/StartMenu.png",
+            "images/Godot/Level1.png",
+            "images/Godot/Level2.png",
+            "images/Godot/Level4.png",
+            "images/Godot/Setting.png"
+        ],
+        overview: "X's Adventure is a four-level 2D puzzle-platformer developed in Godot for Windows. Players explore connected levels, collect resources and solve time-limited environmental puzzles while managing lives and avoiding hazards.",
         contribution: [
-            "Developed movement, jumping, hazard respawning, Camera2D tracking and box-pushing physics.",
-            "Designed and implemented a puzzle-based level with interactive mechanics and obstacles."
+            "Led a four-member team by coordinating task allocation, integration and project communication.",
+            "Built the shared player controller, including movement, jumping, climbing, animation states, Camera2D tracking, box-pushing physics and respawn behaviour.",
+            "Designed and implemented Level 3, including its puzzle flow, balance beam, cargo lift, pressure plates, gates, rope, swamp hazards and enemy respawning.",
+            "Integrated and tested Level 3 audio, visual feedback and gameplay systems, then refined collision and movement issues before submission."
         ],
         keyFeatures: [
-            "Player movement, jumping and hazard respawning.",
-            "Camera2D tracking and box-pushing physics.",
-            "Lever interactions, balance-beam mechanics and environmental obstacles."
+            "Four connected puzzle-platforming levels with shared lives, resources and countdown systems.",
+            "Physics-based box pushing, pressure plates, levers, gates, climbing and a tilting balance beam.",
+            "Swamp hazards with life loss, player respawning and creatures that spawn at random intervals.",
+            "A diamond-powered Time Freezer that temporarily stops a rotating hazard while the main timer continues."
         ],
-        technicalChallenge: "",
-        solution: "",
-        results: [],
+        technicalChallenge: "The original inclined wooden-plank puzzle in Level 3 was unreliable: the player and physics-based box could become stuck or fail to travel up the slope consistently.",
+        solution: "I redesigned the obstacle as a horizontal AnimatableBody2D cargo lift. It detects when both the player and box are present, then moves them upward with controlled acceleration and deceleration, creating a more predictable puzzle while preserving the intended teamwork between movement and physics.",
+        results: [
+            "Completed and integrated a playable four-level Windows desktop game.",
+            "Delivered a stable Level 3 flow with a 180-second timer, working puzzle sequence, hazards, resource tools and scene transition.",
+            "Improved playability through collision, floor-snap, sprite layering, climbing and respawn testing."
+        ],
         github: "",
         report: "",
         documentation: "",
