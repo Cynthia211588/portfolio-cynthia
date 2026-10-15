@@ -122,24 +122,46 @@ window.portfolioProjects = [
         demo: ""
     },
     {
-        title: "Restaurant Ordering Mobile Application",
+        title: "Sawadika Restaurant Ordering App",
         type: "Mobile Application",
-        summary: "A cross-platform mobile application for browsing restaurant menu items and placing orders.",
-        tags: ["React Native", "JavaScript", "Mobile Development"],
-        images: ["images/portfolio/portfolio-1.jpg"],
-        overview: "The application provides a mobile ordering flow that allows users to browse menu items and place restaurant orders.",
+        summary: "A full-stack React Native restaurant application that connects customer ordering journeys with an administrator portal through shared data and supporting services.",
+        tags: ["React Native", "TypeScript", "SQLite", "AsyncStorage", "React Navigation"],
+        images: [
+            "images/Restaurant/menu.png",
+            "images/Restaurant/FrontPage.png",
+            "images/Restaurant/Cart.png",
+            "images/Restaurant/Checkout.png",
+            "images/Restaurant/Payment.png",
+            "images/Restaurant/TrackOrder.png",
+            "images/Restaurant/OrderHistory.png",
+            "images/Restaurant/OrderDetail.png",
+            "images/Restaurant/AdminPortal.png",
+            "images/Restaurant/AdminManageOrder.png",
+            "images/Restaurant/AdminManageMenu.png",
+            "images/Restaurant/AdminManageCustomization.png",
+            "images/Restaurant/AdminSaleReport.png"
+        ],
+        overview: "Sawadika is a four-member full-stack mobile application developed for a Thai restaurant. The React Native customer experience covers account or guest ordering, menu customisation, cart, checkout, order history, tracking and reservations, while the administrator portal supports menu maintenance, active-order management and daily sales reporting. SQLite provides the main on-device data layer, supported by local services for selected real-time and JSON-based features.",
         contribution: [
-            "Developed the cross-platform application using React Native and JavaScript.",
-            "Implemented and tested mobile interfaces and user interactions."
+            "Led the four-member team by planning the work, assigning responsibilities and coordinating integration across the application.",
+            "Designed and implemented the SQLite data layer for users, menu items, customisation options and orders, including database initialisation and CRUD operations.",
+            "Developed customer-facing menu and frontend flows, including category-based menu presentation and the connection between stored menu data and the interface.",
+            "Supported navigation integration and functional testing across the customer ordering journey; the administrator interfaces were handled by other team members."
         ],
         keyFeatures: [
-            "Restaurant menu browsing.",
-            "Mobile order placement workflow.",
-            "Cross-platform user interface and interactions."
+            "Account and guest ordering flows for dine-in and takeaway customers.",
+            "Categorised Thai food menu with item customisation, remarks and quantity controls.",
+            "Cart, checkout, payment selection, order history and order-status tracking.",
+            "SQLite-backed user, menu and order data with AsyncStorage for selected local application state.",
+            "Administrator tools for menu maintenance, order-status updates and daily sales reporting.",
+            "Supporting service APIs for selected reservation, promotion and review workflows."
         ],
-        technicalChallenge: "",
-        solution: "",
-        results: [],
+        technicalChallenge: "The application needed to keep structured menu, user and order data consistent across many mobile screens while remaining available locally after navigation or an application restart.",
+        solution: "I structured the SQLite access behind reusable asynchronous functions for schema creation and CRUD operations, then connected the customer menu screens to that shared data layer. The wider group solution used AsyncStorage for smaller pieces of local state and supporting Express, Socket.IO and JSON services for selected reservation, promotion and review features.",
+        results: [
+            "Completed an integrated customer-and-admin mobile prototype covering the ordering journey and restaurant administration workflows.",
+            "Demonstrated local data persistence, menu and order CRUD operations, input validation and multi-screen navigation in the submitted application."
+        ],
         github: "",
         report: "",
         documentation: "",
@@ -151,8 +173,8 @@ window.portfolioProjects = [
         summary: "A four-level Godot puzzle platformer combining physics-based interaction, environmental hazards and time-limited challenges.",
         tags: ["Godot 4", "GDScript", "2D Physics", "Git", "GitHub"],
         images: [
-            "images/Godot/Level3.png",
             "images/Godot/StartMenu.png",
+            "images/Godot/Level3.png",
             "images/Godot/Level1.png",
             "images/Godot/Level2.png",
             "images/Godot/Level4.png",
