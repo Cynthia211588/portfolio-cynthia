@@ -407,6 +407,13 @@ h3.my-profession {
     color: var(--text-black-700);
 }
 
+.home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+}
+
 .home .home-img {
     flex: 0 0 40%;
     max-width: 40%;
@@ -1832,6 +1839,10 @@ body.dark .whatsapp-float {
 
     .home-info p {
         margin-bottom: 34px;
+    }
+
+    .home-actions {
+        justify-content: center;
     }
 
     .section-title {

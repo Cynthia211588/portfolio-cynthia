@@ -84,7 +84,7 @@ window.portfolioProjects = [
     {
         title: "Nutrition Tracker",
         type: "AI Innovation Hackathon",
-        summary: "An AI-assisted meal tracking platform that turns food photos into nutrition insights for users and patient-monitoring data for administrators.",
+        summary: "An AI-assisted nutrition tracker that turns a meal photo into editable food data, nutrition estimates and personalised feedback, with dashboards for users and administrators.",
         tags: ["JavaScript", "Tailwind CSS", "Vite", "Supabase", "Google Gemini", "FlexToken AI", "USDA API", "Chart.js"],
         images: [
             "images/Nutrition Tracker/homepage.png",
@@ -96,21 +96,21 @@ window.portfolioProjects = [
             "images/Nutrition Tracker/history.png",
             "images/Nutrition Tracker/UserProfile.png"
         ],
-        overview: "Nutrition Tracker was developed by a five-member team during the AI Innovation Hackathon. The prototype allows users to upload a meal photo, review detected food items and receive estimated nutrition information and AI-assisted dietary insights. It also provides administrators with patient status monitoring and individual nutrition dashboards.",
+        overview: "Nutrition Tracker was developed by a five-member team during the AI Innovation Hackathon. A user uploads a meal photo, reviews and corrects the food items detected by Google Gemini, and confirms the serving sizes. The application then uses USDA reference data and the FlexToken Qwen model to prepare nutrition values and dietary feedback. Meal records are stored in Supabase for history and trend dashboards, while administrators can review patient status and individual nutrition data.",
         contribution: [
-            "Developed and refined the frontend interfaces for the user and administrator workflows.",
-            "Implemented responsive behaviour so the application remained usable across desktop, tablet and mobile screen sizes.",
-            "Conducted functional and responsive testing and verified the complete upload-to-analysis workflow before presentation."
+            "Contributed to the multi-page frontend for both user and administrator workflows, including upload, confirmation, results, history and dashboard screens.",
+            "Refined responsive layouts for navigation, forms, cards, tables and charts across desktop, tablet and mobile screen sizes.",
+            "Carried out manual functional and responsive testing of the complete upload-to-analysis flow and fixed interface issues before the live presentation."
         ],
         keyFeatures: [
-            "Meal-image upload followed by AI-assisted food identification and editable portion confirmation.",
-            "Estimated calories, macronutrients, micronutrients and meal-level dietary feedback.",
-            "User dashboard with daily and weekly nutrition summaries, charts and AI-generated recommendations.",
-            "Meal history, user health profile and detailed nutrition-analysis views.",
-            "Administrator dashboard for monitoring patient risk status and reviewing individual patient trends."
+            "Meal-photo upload with Google Gemini food recognition and an editable confirmation step before the data is saved.",
+            "USDA nutrition lookup, serving-size calculation and AI-assisted meal assessment.",
+            "Supabase authentication, meal-image storage and persistent nutrition records.",
+            "User profile, meal history, weekly and monthly charts, nutrient targets and trend insights.",
+            "Administrator search, filtering and patient dashboards for reviewing nutrition and risk status."
         ],
-        technicalChallenge: "The organiser-provided FlexToken model accepted text but could not interpret uploaded food images directly. The team therefore needed a reliable bridge between the image-upload experience and the text-based nutrition assessment pipeline.",
-        solution: "The team integrated Google Gemini as the multimodal vision layer to interpret the uploaded meal image and return structured food information. The structured output could then be combined with USDA nutrition data and passed as text into the organiser-provided FlexToken Qwen 2.5 model for assessment and recommendations. On the frontend, I implemented and tested the multi-step upload, confirmation and result experience across responsive layouts.",
+        technicalChallenge: "The FlexToken model provided by the organiser accepted text but could not read an uploaded food image. The team needed to convert the photo into reliable structured input before it could generate a useful nutrition assessment.",
+        solution: "The team used Google Gemini to identify food from the image and return a structured list. The user could correct the detected items and serving sizes before the application searched USDA reference data and passed the final text data to FlexToken Qwen 2.5. I focused on making this multi-step frontend flow clear, responsive and testable from upload through to the final result.",
         results: [
             "Successfully deployed a working prototype and provided QR-code access for judges to test during the live presentation.",
             "Completed the full user and administrator demonstration flow, including meal upload, nutrition analysis, dashboards and patient monitoring.",
